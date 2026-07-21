@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physique Interactif - Mr Ndjana a Bidias</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 40px;
+            max-width: 950px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .enseignant-info {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #1a2a6c;
+        }
+        .enseignant-info h1 {
+            font-size: 1.8rem;
+            color: #1a2a6c;
+            font-weight: 700;
+        }
+        .enseignant-info h2 {
+            font-size: 1.4rem;
+            color: #b21f1f;
+            font-weight: 600;
+            letter-spacing: 3px;
+        }
+        .enseignant-info .discipline {
+            display: inline-block;
+            background: #1a2a6c;
+            color: white;
+            padding: 5px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+        .enseignant-info .numero {
+            display: inline-block;
+            background: #25d366;
+            color: white;
+            padding: 5px 20px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-top: 8px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 14px 40px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-primary {
+            background: #1a2a6c;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #0d1b4a;
+            transform: translateY(-2px);
+        }
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #1e7e34;
+            transform: translateY(-2px);
+        }
+        .btn-whatsapp {
+            background: #25d366;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn-whatsapp:hover {
+            background: #1da851;
+            transform: translateY(-2px);
+        }
+        .btn-outline {
+            background: transparent;
+            color: #1a2a6c;
+            border: 2px solid #1a2a6c;
+        }
+        .btn-outline:hover {
+            background: #1a2a6c;
+            color: white;
+        }
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            background: #f8f9fa;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #1a2a6c;
+            background: white;
+        }
+        .filtres-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+            justify-content: center;
+        }
+        .filtres-container .btn-filtre {
+            padding: 8px 18px;
+            border: 2px solid #1a2a6c;
+            border-radius: 20px;
+            background: white;
+            color: #1a2a6c;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .filtres-container .btn-filtre.active {
+            background: #1a2a6c;
+            color: white;
+        }
+        .filtres-container .btn-filtre:hover {
+            background: #1a2a6c;
+            color: white;
+        }
+        .filtres-container .btn-filtre.serie-c {
+            border-color: #28a745;
+            color: #28a745;
+        }
+        .filtres-container .btn-filtre.serie-c.active {
+            background: #28a745;
+            color: white;
+        }
+        .filtres-container .btn-filtre.serie-ti {
+            border-color: #6c757d;
+            color: #6c757d;
+        }
+        .filtres-container .btn-filtre.serie-ti.active {
+            background: #6c757d;
+            color: white;
+        }
+        .filtres-container .btn-filtre.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .module-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        .btn-module {
+            padding: 18px 15px;
+            font-size: 0.9rem;
+            border-radius: 15px;
+            margin-bottom: 12px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-align: center;
+            cursor: pointer;
+        }
+        .btn-module:hover {
+            background: #e9ecef;
+            border-color: #1a2a6c;
+            transform: translateY(-2px);
+        }
+        .btn-module .icon {
+            font-size: 1.6rem;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .btn-module .titre-module {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #1a2a6c;
+        }
+        .btn-module .sous-titre {
+            font-size: 0.7rem;
+            color: #888;
+        }
+        .btn-module .niveau-badge {
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 0.6rem;
+            margin-top: 4px;
+            font-weight: 600;
+        }
+        .niveau-badge.badge-1ere {
+            background: #fdbb2d;
+            color: #1a2a6c;
+        }
+        .niveau-badge.badge-terminale {
+            background: #b21f1f;
+            color: white;
+        }
+        .niveau-badge.badge-serie-c {
+            background: #28a745;
+            color: white;
+        }
+        .niveau-badge.badge-serie-d {
+            background: #1a2a6c;
+            color: white;
+        }
+        .niveau-badge.badge-serie-ti {
+            background: #6c757d;
+            color: white;
+        }
+        .lecon-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .btn-lecon {
+            padding: 14px 12px;
+            border-radius: 12px;
+            border: 2px solid #e9ecef;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        .btn-lecon:hover {
+            background: #e9ecef;
+            border-color: #1a2a6c;
+            transform: translateY(-2px);
+        }
+        .btn-lecon .lecon-num {
+            display: inline-block;
+            background: #1a2a6c;
+            color: white;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            line-height: 28px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .btn-lecon .lecon-titre {
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: #1a2a6c;
+            display: block;
+        }
+        .btn-lecon .lecon-objectif {
+            font-size: 0.65rem;
+            color: #888;
+            display: block;
+            margin-top: 3px;
+        }
+        .btn-lecon .lecon-q {
+            font-size: 0.6rem;
+            color: #aaa;
+        }
+        .btn-lecon.integration {
+            border-color: #28a745;
+            background: #e8f5e9;
+        }
+        .btn-lecon.integration .lecon-num {
+            background: #28a745;
+        }
+        .btn-lecon.completed {
+            border-color: #28a745;
+            background: #e8f5e9;
+        }
+        .btn-lecon.completed::after {
+            content: " ✅";
+            color: #28a745;
+        }
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #eee;
+        }
+        .question-header .badge {
+            background: #1a2a6c;
+            color: white;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .question-header .lecon-titre {
+            font-weight: 600;
+            color: #1a2a6c;
+            font-size: 0.9rem;
+        }
+        .question-text {
+            font-size: 1.1rem;
+            color: #222;
+            font-weight: 500;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 16px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .option-item:hover {
+            background: #e9ecef;
+            border-color: #1a2a6c;
+        }
+        .option-item.selected {
+            background: #d4e0ff;
+            border-color: #1a2a6c;
+        }
+        .option-item input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #1a2a6c;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .option-item label {
+            cursor: pointer;
+            font-size: 0.95rem;
+            color: #222;
+            flex: 1;
+        }
+        .option-item .lettre {
+            font-weight: 700;
+            color: #1a2a6c;
+            width: 24px;
+        }
+        .correction-box {
+            margin: 15px 0;
+            padding: 18px;
+            border-radius: 12px;
+            background: #f0f8ff;
+            border-left: 5px solid #1a2a6c;
+        }
+        .correction-box.correct {
+            border-left-color: #28a745;
+            background: #e8f5e9;
+        }
+        .correction-box.incorrect {
+            border-left-color: #dc3545;
+            background: #fce4ec;
+        }
+        .correction-box .status {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .correction-box .status.correct {
+            color: #28a745;
+        }
+        .correction-box .status.incorrect {
+            color: #dc3545;
+        }
+        .correction-box .explication {
+            color: #444;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+        .correction-box .explication strong {
+            color: #1a2a6c;
+        }
+        .score-circle {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: #1a2a6c;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        .score-circle small {
+            font-size: 0.9rem;
+            font-weight: 400;
+            opacity: 0.8;
+        }
+        .result-detail {
+            text-align: center;
+            margin: 10px 0;
+        }
+        .result-detail span {
+            font-weight: 600;
+            color: #1a2a6c;
+        }
+        .progress-bar-container {
+            background: #e9ecef;
+            border-radius: 20px;
+            height: 20px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        .progress-bar {
+            background: linear-gradient(90deg, #1a2a6c, #fdbb2d);
+            height: 100%;
+            border-radius: 20px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .progression-info {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #555;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+        }
+        .progression-info strong {
+            color: #1a2a6c;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .mt-20 {
+            margin-top: 20px;
+        }
+        .mb-20 {
+            margin-bottom: 20px;
+        }
+        .mt-10 {
+            margin-top: 10px;
+        }
+        .mb-10 {
+            margin-bottom: 10px;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+        .flex-between .btn {
+            width: auto;
+            flex: 1;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            .question-text {
+                font-size: 1rem;
+            }
+            .option-item {
+                padding: 10px 12px;
+            }
+            .flex-between {
+                flex-direction: column;
+            }
+            .flex-between .btn {
+                width: 100%;
+            }
+            .enseignant-info h1 {
+                font-size: 1.3rem;
+            }
+            .enseignant-info h2 {
+                font-size: 1rem;
+            }
+            .lecon-grid {
+                grid-template-columns: 1fr;
+            }
+            .module-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="app">
+        <!-- ===== PAGE D'ACCUEIL ===== -->
+        <div id="page-accueil">
+            <div class="enseignant-info">
+                <h1>👨‍🏫 Mr Ndjana a Bidias</h1>
+                <h2>PHYSIQUE</h2>
+                <div class="discipline">⚡ Sciences & Technologie</div>
+                <div class="numero">📱 WhatsApp : 694 723 256</div>
+            </div>
+            <div style="text-align:center;margin:20px 0;">
+                <p style="font-size:1.1rem;color:#555;max-width:500px;margin:0 auto;">
+                    Bienvenue dans votre espace d'apprentissage interactif.<br>
+                    Chaque module est découpé en <strong>leçons</strong> avec des questions ciblées.
+                </p>
+            </div>
+            <div id="progression-accueil" class="progression-info hidden"></div>
+            <button class="btn btn-primary" onclick="demarrerOuContinuer()">🚀 Commencer / Continuer</button>
+            <button class="btn btn-outline mt-20" onclick="reinitialiserProgression()" style="background:#f8f9fa;color:#dc3545;border-color:#dc3545;">🗑️ Réinitialiser ma progression</button>
+        </div>
+        <!-- ===== PAGE PROFIL ===== -->
+        <div id="page-profil" class="hidden">
+            <h2 style="text-align:center;color:#1a2a6c;margin-bottom:25px;">📋 Votre Profil</h2>
+            <div class="form-group">
+                <label for="nom">Nom complet</label>
+                <input type="text" id="nom" placeholder="Ex: Alain" required>
+            </div>
+            <div class="form-group">
+                <label for="niveau">Niveau</label>
+                <select id="niveau">
+                    <option value="1ere">1ère</option>
+                    <option value="Terminale">Terminale</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="serie">Série</label>
+                <select id="serie">
+                    <option value="D">D</option>
+                    <option value="C">C</option>
+                    <option value="TI">TI</option>
+                </select>
+            </div>
+            <button class="btn btn-success" onclick="enregistrerProfil()">✅ Continuer</button>
+            <button class="btn btn-danger mt-20" onclick="showPage('page-accueil')" style="background:#6c757d;">⬅ Retour</button>
+        </div>
+        <!-- ===== PAGE MODULES ===== -->
+        <div id="page-modules" class="hidden">
+            <h2 style="text-align:center;color:#1a2a6c;margin-bottom:10px;">📚 Choisissez un module</h2>
+            <p style="text-align:center;color:#555;margin-bottom:10px;">Bonjour <span id="eleve-nom-module" style="font-weight:600;color:#1a2a6c;">Alain</span> !</p>
+            <div id="progression-resume" class="progression-info"></div>
+            <div class="filtres-container">
+                <button class="btn-filtre serie-d active" data-filtre="D" onclick="changerFiltre('D')">Série D</button>
+                <button class="btn-filtre serie-c" data-filtre="C" onclick="changerFiltre('C')">Série C</button>
+                <button class="btn-filtre serie-ti" data-filtre="TI" onclick="changerFiltre('TI')">Série TI</button>
+                <button class="btn-filtre serie-tc disabled" data-filtre="TC" onclick="changerFiltre('TC')" title="Disponible prochainement">Terminale C 🔜</button>
+            </div>
+            <div id="module-grid-container"></div>
+            <button class="btn btn-danger mt-20" onclick="showPage('page-profil')" style="background:#6c757d;">⬅ Modifier mon profil</button>
+        </div>
+        <!-- ===== PAGE LEÇONS ===== -->
+        <div id="page-lecons" class="hidden">
+            <h2 style="text-align:center;color:#1a2a6c;margin-bottom:5px;" id="lecon-module-titre">Module</h2>
+            <p style="text-align:center;color:#555;font-size:0.9rem;margin-bottom:10px;">Choisissez une leçon à réviser.</p>
+            <div class="progress-bar-container"><div class="progress-bar" id="lecon-progress-bar" style="width:0%;">0%</div></div>
+            <div id="lecon-grid-container" class="lecon-grid"></div>
+            <button class="btn btn-danger mt-20" onclick="showPage('page-modules')" style="background:#6c757d;">⬅ Retour aux modules</button>
+        </div>
+        <!-- ===== PAGE QUIZ ===== -->
+        <div id="page-quiz" class="hidden">
+            <div class="question-header">
+                <span class="lecon-titre" id="quiz-lecon-titre">Leçon</span>
+                <span class="badge" id="question-progress">1 / 5</span>
+            </div>
+            <div style="font-size:0.8rem;color:#888;margin-bottom:10px;"><span id="quiz-module-nom">Module</span></div>
+            <div id="question-container"></div>
+            <div id="correction-container" class="hidden"></div>
+            <div id="question-actions" class="mt-10 flex-between"></div>
+        </div>
+        <!-- ===== PAGE RÉSULTATS ===== -->
+        <div id="page-resultats-lecon" class="hidden">
+            <h2 style="text-align:center;color:#1a2a6c;margin-bottom:5px;">📊 Résultats de la leçon</h2>
+            <p style="text-align:center;color:#555;font-size:0.9rem;" id="result-lecon-nom">Leçon</p>
+            <div class="score-circle" id="score-display-lecon">0 <small>/ 5</small></div>
+            <div class="result-detail">
+                <p style="font-size:1.1rem;color:#555;"><span id="result-nom-lecon">Alain</span>, voici votre performance :</p>
+                <p style="font-size:1.1rem;margin-top:5px;">✅ <span id="result-juste-lecon" style="color:#28a745;">0</span> bonnes réponses &nbsp;|&nbsp; ❌ <span id="result-faux-lecon" style="color:#dc3545;">0</span> mauvaises réponses</p>
+            </div>
+            <div style="margin:15px 0;text-align:center;">
+                <button class="btn btn-whatsapp" onclick="envoyerWhatsApp()">📱 Envoyer les résultats au professeur</button>
+            </div>
+            <button class="btn btn-primary mt-10" onclick="retourLecons()">📚 Retour aux leçons</button>
+        </div>
+    </div>
+    <script>
+        const NUMERO_WHATSAPP = "237694723256";
+
+        function sauvegarderProgression() {
+            const donnees = { eleve: etat.eleve, leconsCompleted: etat.leconsCompleted || {}, date: new Date().toISOString() };
+            try { localStorage.setItem('physique_progression', JSON.stringify(donnees));
+                localStorage.setItem('physique_eleve', JSON.stringify(etat.eleve)); } catch (e) {}
+        }
+
+        function chargerProgression() {
+            try {
+                const donnees = localStorage.getItem('physique_progression');
+                if (donnees) {
+                    const parsed = JSON.parse(donnees);
+                    if (parsed.eleve) { etat.eleve = parsed.eleve;
+                        document.getElementById('nom').value = parsed.eleve.nom || '';
+                        document.getElementById('niveau').value = parsed.eleve.niveau || '1ere';
+                        document.getElementById('serie').value = parsed.eleve.serie || 'D'; }
+                    if (parsed.leconsCompleted) { etat.leconsCompleted = parsed.leconsCompleted; }
+                    return true;
+                }
+            } catch (e) {}
+            return false;
+        }
+
+        function reinitialiserProgression() {
+            if (confirm('Êtes-vous sûr de vouloir réinitialiser toute votre progression ?')) {
+                localStorage.removeItem('physique_progression');
+                localStorage.removeItem('physique_eleve');
+                etat.leconsCompleted = {};
+                etat.eleve = { nom: "", niveau: "1ere", serie: "D" };
+                afficherProgressionAccueil();
+                alert('✅ Progression réinitialisée.');
+                showPage('page-accueil');
+            }
+        }
+
+        function getProgressionStats() {
+            const completed = Object.keys(etat.leconsCompleted || {}).filter(k => etat.leconsCompleted[k]);
+            return { completed: completed.length, total: Object.keys(etat.leconsCompleted || {}).length };
+        }
+
+        function afficherProgressionAccueil() {
+            const stats = getProgressionStats();
+            const container = document.getElementById('progression-accueil');
+            if (stats.completed > 0 && etat.eleve.nom) {
+                container.classList.remove('hidden');
+                container.innerHTML =
+                    `📊 Progression : <strong>${stats.completed}</strong> leçons complétées<br><small>${etat.eleve.nom} - ${etat.eleve.niveau} ${etat.eleve.serie}</small>`;
+            } else { container.classList.add('hidden'); }
+        }
+
+        function afficherProgressionModules() {
+            const stats = getProgressionStats();
+            const container = document.getElementById('progression-resume');
+            if (stats.completed > 0 && etat.eleve.nom) {
+                container.innerHTML =
+                    `📊 Progression : <strong>${stats.completed}</strong> leçons complétées${stats.total > 0 ? ' sur '+stats.total : ''}<br><small>${etat.eleve.nom} - ${etat.eleve.niveau} ${etat.eleve.serie}</small>`;
+            } else { container.innerHTML = '📊 Aucune leçon complétée. Commencez votre apprentissage !'; }
+        }
+
+        function demarrerOuContinuer() {
+            if (chargerProgression() && etat.eleve.nom) {
+                document.getElementById('eleve-nom-module').textContent = etat.eleve.nom;
+                etat.filtreSerie = etat.eleve.serie || 'D';
+                document.querySelectorAll('.btn-filtre').forEach(b => b.classList.toggle('active', b.dataset.filtre === etat
+                    .filtreSerie));
+                afficherModules(etat.eleve.niveau, etat.eleve.serie);
+                afficherProgressionModules();
+                showPage('page-modules');
+            } else { showPage('page-profil'); }
+        }
+
+        // ================================================================
+        // DONNÉES : LEÇONS - 1ÈRE D
+        // ================================================================
+
+        const modulesData = {
+            "1D_mesures": {
+                titre: "Mesures et Incertitudes",
+                niveau: "1ere",
+                serie: "D",
+                icone: "📏",
+                lecons: [
+                    { titre: "Incertitude de mesure", objectif: "Comprendre la notion d'incertitude", questions: [
+                            { id: 1, question: "Qu'est-ce que l'incertitude de mesure ?", options: ["A) L'erreur commise lors d'une mesure.", "B) L'intervalle dans lequel se trouve la valeur vraie.", "C) La différence entre la valeur mesurée et la valeur vraie.", "D) La précision de l'instrument."],
+                                reponse: "B", explication: "L'incertitude de mesure est l'intervalle de valeurs dans lequel se trouve la valeur vraie." },
+                            { id: 2, question: "Une erreur systématique est :", options: ["A) Variable aléatoirement.", "B) Toujours du même signe.", "C) Due à la résolution.", "D) Négligeable."],
+                                reponse: "B", explication: "Une erreur systématique se reproduit de manière constante (même signe)." },
+                            { id: 3, question: "Une erreur aléatoire est due à :", options: ["A) Un défaut de l'instrument.", "B) Des fluctuations imprévisibles.", "C) Une mauvaise utilisation.", "D) Une erreur de calcul."],
+                                reponse: "B", explication: "Une erreur aléatoire est due à des fluctuations imprévisibles." },
+                            { id: 4, question: "La valeur vraie d'une grandeur est :", options: ["A) La valeur mesurée.", "B) Une valeur théorique idéale.", "C) La moyenne des mesures.", "D) La valeur affichée."],
+                                reponse: "B", explication: "La valeur vraie est une valeur théorique que l'on ne connaît jamais exactement." },
+                            { id: 5, question: "Si L = 12,5 ± 0,2 cm, le 0,2 cm est :", options: ["A) L'erreur de lecture.", "B) L'incertitude élargie.", "C) L'écart-type.", "D) La résolution."],
+                                reponse: "B", explication: "Le 0,2 cm représente l'incertitude élargie." }
+                        ] },
+                    { titre: "Qualités d'un instrument", objectif: "Distinguer fidélité, sensibilité et justesse", questions: [
+                            { id: 6, question: "La fidélité d'un instrument est :", options: ["A) Sa capacité à donner des mesures proches de la valeur vraie.", "B) Sa capacité à donner des mesures reproductibles.", "C) Sa capacité à détecter de petites variations.", "D) Sa stabilité dans le temps."],
+                                reponse: "B", explication: "La fidélité est la capacité à donner des résultats reproductibles." },
+                            { id: 7, question: "La sensibilité d'un instrument est :", options: ["A) La plus petite variation détectable.", "B) L'écart à la valeur vraie.", "C) La stabilité.", "D) La rapidité."],
+                                reponse: "A", explication: "La sensibilité est la capacité à détecter de petites variations." },
+                            { id: 8, question: "La justesse d'un instrument est :", options: ["A) Sa capacité à donner des mesures reproductibles.", "B) Sa capacité à donner des mesures proches de la valeur vraie.", "C) Sa capacité à détecter de petites variations.", "D) Sa stabilité."],
+                                reponse: "B", explication: "La justesse est la capacité à donner des mesures proches de la valeur vraie." },
+                            { id: 9, question: "La résolution d'un instrument est :", options: ["A) La plus petite variation détectable.", "B) La plus grande valeur mesurable.", "C) La rapidité.", "D) La stabilité."],
+                                reponse: "A", explication: "La résolution est la plus petite variation détectable." },
+                            { id: 10, question: "La portée d'un instrument est :", options: ["A) La plus petite valeur mesurable.", "B) La plus grande valeur mesurable.", "C) L'étendue des valeurs mesurables.", "D) La précision."],
+                                reponse: "C", explication: "La portée est l'étendue des valeurs mesurables." }
+                        ] },
+                    { titre: "Incertitude type et élargie", objectif: "Calculer et interpréter les incertitudes", questions: [
+                            { id: 11, question: "L'incertitude type u(x) est :", options: ["A) La moyenne des écarts.", "B) L'écart-type de la distribution.", "C) L'erreur maximale.", "D) La moitié de l'erreur maximale."],
+                                reponse: "B", explication: "L'incertitude type est l'écart-type estimé de la distribution." },
+                            { id: 12, question: "L'incertitude élargie U = k × u(x). Que représente k ?", options: ["A) Le nombre de mesures.", "B) Le facteur de couverture.", "C) La moyenne.", "D) La résolution."],
+                                reponse: "B", explication: "k est le facteur de couverture (généralement 2 pour 95%)." },
+                            { id: 13, question: "Pour un niveau de confiance de 95%, k vaut :", options: ["A) 1", "B) 1,96", "C) 2", "D) 3"],
+                                reponse: "C", explication: "Pour 95%, on prend k = 2." },
+                            { id: 14, question: "Pour une mesure unique de résolution r, u = :", options: ["A) r", "B) r/2", "C) r/√3", "D) r/√12"],
+                                reponse: "C", explication: "u = r/√3 pour une distribution uniforme." },
+                            { id: 15, question: "L'incertitude sur la moyenne est :", options: ["A) σ/√n", "B) σ×√n", "C) σ/n", "D) σ×n"],
+                                reponse: "A", explication: "u(x̄) = σ/√n." }
+                        ] },
+                    { titre: "Intervalle de confiance", objectif: "Comprendre et utiliser l'intervalle de confiance", questions: [
+                            { id: 16, question: "Un intervalle de confiance de 95% signifie :", options: ["A) La valeur vraie a 95% de chances d'être dans l'intervalle.", "B) 95% des mesures sont dans l'intervalle.", "C) L'erreur maximale est de 5%.", "D) La mesure est fiable à 95%."],
+                                reponse: "A", explication: "La valeur vraie a 95% de chances de se trouver dans l'intervalle." },
+                            { id: 17, question: "Pour f = a × b, l'incertitude relative est :", options: ["A) u(a)/a + u(b)/b", "B) √[(u(a)/a)² + (u(b)/b)²]", "C) u(a)/a × u(b)/b", "D) (u(a)/a)² + (u(b)/b)²"],
+                                reponse: "B", explication: "Pour un produit, on additionne en quadrature." },
+                            { id: 18, question: "Un intervalle de confiance s'écrit :", options: ["A) [x̄ - U, x̄ + U]", "B) [x̄ - u, x̄ + u]", "C) [x̄ - σ, x̄ + σ]", "D) [x̄ - 2σ, x̄ + 2σ]"],
+                                reponse: "A", explication: "L'intervalle est [x̄ - U, x̄ + U]." },
+                            { id: 19, question: "L'incertitude type composée combine :", options: ["A) Type A et Type B.", "B) Erreurs systématiques et aléatoires.", "C) Erreurs de lecture et de calcul.", "D) Incertitudes relatives."],
+                                reponse: "A", explication: "u_c = √[u_A² + u_B²]." },
+                            { id: 20, question: "La valeur mesurée s'écrit x = x̄ ± U. U est :", options: ["A) L'écart-type.", "B) L'incertitude élargie.", "C) La résolution.", "D) La sensibilité."],
+                                reponse: "B", explication: "U est l'incertitude élargie." }
+                        ] },
+                    { titre: "Modélisation et hypothèses", objectif: "Comprendre les modèles et les hypothèses", questions: [
+                            { id: 21, question: "Un modèle en physique est :", options: ["A) Une représentation simplifiée de la réalité.", "B) Une loi mathématique exacte.", "C) Une expérience.", "D) Un instrument."],
+                                reponse: "A", explication: "Un modèle est une représentation simplifiée de la réalité." },
+                            { id: 22, question: "La loi d'Ohm est un exemple de :", options: ["A) Loi empirique.", "B) Modèle théorique.", "C) Loi de conservation.", "D) Relation dimensionnelle."],
+                                reponse: "B", explication: "La loi d'Ohm est un modèle théorique." },
+                            { id: 23, question: "Dans le pendule simple, on néglige :", options: ["A) La masse.", "B) Les frottements et la masse du fil.", "C) La longueur.", "D) La gravité."],
+                                reponse: "B", explication: "On néglige les frottements et la masse du fil." },
+                            { id: 24, question: "L'analyse dimensionnelle permet de :", options: ["A) Calculer la valeur numérique.", "B) Vérifier l'homogénéité d'une relation.", "C) Mesurer avec précision.", "D) Déterminer l'incertitude."],
+                                reponse: "B", explication: "L'analyse dimensionnelle vérifie l'homogénéité d'une relation." },
+                            { id: 25, question: "Une hypothèse simplificatrice est :", options: ["A) Une approximation.", "B) Une loi exacte.", "C) Une mesure précise.", "D) Une erreur."],
+                                reponse: "A", explication: "Une hypothèse simplificatrice est une approximation." }
+                        ] },
+                    { titre: "Ordres de grandeur et chiffres significatifs", objectif: "Maîtriser les ordres de grandeur et les chiffres significatifs", questions: [
+                            { id: 26, question: "Un ordre de grandeur est :", options: ["A) Une mesure précise.", "B) Une estimation à une puissance de 10 près.", "C) Une valeur exacte.", "D) Une approximation à 1%."],
+                                reponse: "B", explication: "Un ordre de grandeur est une estimation à une puissance de 10 près." },
+                            { id: 27, question: "12,50 cm comporte combien de chiffres significatifs ?", options: ["A) 2", "B) 3", "C) 4", "D) 5"],
+                                reponse: "C", explication: "12,50 a 4 chiffres significatifs (le 0 est significatif)." },
+                            { id: 28, question: "Le résultat d'une multiplication doit avoir :", options: ["A) Autant de chiffres significatifs que le nombre qui en a le plus.", "B) Autant de chiffres significatifs que le nombre qui en a le moins.", "C) 3 chiffres.", "D) 4 chiffres."],
+                                reponse: "B", explication: "Le résultat doit avoir autant de chiffres significatifs que le nombre qui en a le moins." },
+                            { id: 29, question: "La taille d'un atome est de l'ordre de :", options: ["A) 10⁻⁶ m", "B) 10⁻⁹ m", "C) 10⁻¹⁰ m", "D) 10⁻¹² m"],
+                                reponse: "C", explication: "La taille d'un atome est de l'ordre de 10⁻¹⁰ m." },
+                            { id: 30, question: "Pour une addition, le résultat doit avoir :", options: ["A) Autant de chiffres significatifs.", "B) Le même nombre de décimales que le nombre qui en a le moins.", "C) 3 chiffres.", "D) 4 chiffres."],
+                                reponse: "B", explication: "Pour une addition, on garde le même nombre de décimales." }
+                        ] }
+                ]
+            },
+            "1D_mecanique": {
+                titre: "Mouvements et Interactions Mécaniques",
+                niveau: "1ere",
+                serie: "D",
+                icone: "⚙️",
+                lecons: [
+                    { titre: "Travail d'une force", objectif: "Définir et calculer le travail d'une force", questions: [
+                            { id: 1, question: "Le travail d'une force constante est :", options: ["A) W = F × AB", "B) W = F · AB", "C) W = F × AB", "D) W = F / AB"],
+                                reponse: "B", explication: "W = F · AB (produit scalaire)." },
+                            { id: 2, question: "Le travail du poids d'un corps qui descend est :", options: ["A) Nul.", "B) Positif.", "C) Négatif.", "D) Variable."],
+                                reponse: "B", explication: "Le poids est dans le sens du mouvement, donc travail positif." },
+                            { id: 3, question: "Le travail du poids d'un corps qui monte est :", options: ["A) Nul.", "B) Positif.", "C) Négatif.", "D) Variable."],
+                                reponse: "C", explication: "Le poids s'oppose au mouvement, donc travail négatif." },
+                            { id: 4, question: "Une force conservative a un travail qui :", options: ["A) Dépend du chemin.", "B) Ne dépend que des positions initiale et finale.", "C) Est toujours nul.", "D) Est toujours positif."],
+                                reponse: "B", explication: "Une force conservative a un travail indépendant du chemin." },
+                            { id: 5, question: "Le travail d'un couple de moment M est :", options: ["A) W = M × θ", "B) W = M / θ", "C) W = θ / M", "D) W = M × θ²"],
+                                reponse: "A", explication: "W = M × θ." }
+                        ] },
+                    { titre: "Puissance d'une force", objectif: "Définir et calculer la puissance", questions: [
+                            { id: 6, question: "La puissance moyenne est :", options: ["A) P = W × Δt", "B) P = W / Δt", "C) P = Δt / W", "D) P = F × v"],
+                                reponse: "B", explication: "P = W / Δt." },
+                            { id: 7, question: "Une force effectue W = 600 J en Δt = 30 s. P = ?", options: ["A) 20 W", "B) 30 W", "C) 180 W", "D) 18000 W"],
+                                reponse: "A", explication: "P = 600/30 = 20 W." },
+                            { id: 8, question: "L'unité de puissance est :", options: ["A) Le Joule", "B) Le Watt", "C) Le Newton", "D) Le Pascal"],
+                                reponse: "B", explication: "L'unité de puissance est le Watt (W)." },
+                            { id: 9, question: "La puissance instantanée est :", options: ["A) P = F × v", "B) P = F / v", "C) P = m × a", "D) P = E / t"],
+                                reponse: "A", explication: "P = F × v." },
+                            { id: 10, question: "La puissance d'un couple de moment M est :", options: ["A) P = M × ω", "B) P = M / ω", "C) P = M × θ", "D) P = M × ω²"],
+                                reponse: "A", explication: "P = M × ω." }
+                        ] },
+                    { titre: "Énergie cinétique", objectif: "Définir et calculer l'énergie cinétique", questions: [
+                            { id: 11, question: "Un solide de m=2kg à v=3m/s a Ec = ?", options: ["A) 3 J", "B) 6 J", "C) 9 J", "D) 18 J"],
+                                reponse: "C", explication: "Ec = ½×2×3² = 9 J." },
+                            { id: 12, question: "L'énergie cinétique en translation est :", options: ["A) Ec = m×v", "B) Ec = ½×m×v²", "C) Ec = m×v²", "D) Ec = ½×m×v"],
+                                reponse: "B", explication: "Ec = ½×m×v²." },
+                            { id: 13, question: "L'énergie cinétique en rotation est :", options: ["A) Ec = ½×m×v²", "B) Ec = ½×J×ω²", "C) Ec = J×ω²", "D) Ec = ½×m×ω²"],
+                                reponse: "B", explication: "Ec = ½×J×ω²." },
+                            { id: 14, question: "Le théorème de l'énergie cinétique est :", options: ["A) ΔEc = ΣW(F)", "B) ΔEc = ΣF", "C) ΔEc = m×a", "D) ΔEc = 0"],
+                                reponse: "A", explication: "ΔEc = ΣW(F)." },
+                            { id: 15, question: "Si une force motrice agit, l'énergie cinétique :", options: ["A) Diminue.", "B) Reste constante.", "C) Augmente.", "D) S'annule."],
+                                reponse: "C", explication: "Le travail positif augmente l'énergie cinétique." }
+                        ] },
+                    { titre: "Énergie potentielle et mécanique", objectif: "Comprendre les énergies potentielles et la conservation", questions: [
+                            { id: 16, question: "L'énergie potentielle de pesanteur est :", options: ["A) Epp = m×z", "B) Epp = m×g×z", "C) Epp = ½×m×g×z²", "D) Epp = m×g×z²"],
+                                reponse: "B", explication: "Epp = m×g×z." },
+                            { id: 17, question: "L'énergie potentielle élastique est :", options: ["A) Epe = ½×k×x", "B) Epe = ½×k×x²", "C) Epe = k×x²", "D) Epe = k×x"],
+                                reponse: "B", explication: "Epe = ½×k×x²." },
+                            { id: 18, question: "L'énergie mécanique est :", options: ["A) Em = Ec + Ep", "B) Em = Ec - Ep", "C) Em = Ec × Ep", "D) Em = Ec / Ep"],
+                                reponse: "A", explication: "Em = Ec + Ep." },
+                            { id: 19, question: "L'énergie mécanique se conserve lorsque :", options: ["A) Des frottements agissent.", "B) Seules des forces conservatives agissent.", "C) La vitesse est constante.", "D) La température augmente."],
+                                reponse: "B", explication: "Seules les forces conservatives assurent la conservation." },
+                            { id: 20, question: "La variation de l'énergie mécanique est :", options: ["A) Le travail des forces conservatives.", "B) Le travail des forces non-conservatives.", "C) Le travail du poids.", "D) Le travail de la réaction."],
+                                reponse: "B", explication: "ΔEm = W(forces non-conservatives)." }
+                        ] },
+                    { titre: "Échanges thermiques", objectif: "Comprendre les échanges de chaleur", questions: [
+                            { id: 21, question: "Q = m×c×ΔT représente :", options: ["A) La chaleur pour un changement d'état.", "B) La chaleur pour une variation de température.", "C) La chaleur latente.", "D) La capacité thermique."],
+                                reponse: "B", explication: "Q = m×c×ΔT est la chaleur pour une variation de température." },
+                            { id: 22, question: "Pour fondre de la glace, Q = :", options: ["A) m×c×ΔT", "B) m×Lf", "C) c×ΔT", "D) m×ΔT"],
+                                reponse: "B", explication: "Q = m×Lf pour un changement d'état." },
+                            { id: 23, question: "La capacité thermique massique est :", options: ["A) L'énergie pour élever 1 kg de 1°C.", "B) L'énergie pour faire fondre 1 kg.", "C) La chaleur pour vaporiser 1 kg.", "D) La température."],
+                                reponse: "A", explication: "c est l'énergie pour élever 1 kg de 1°C." },
+                            { id: 24, question: "Le principe des échanges de chaleur est :", options: ["A) Q_gagnée = -Q_perdue", "B) Q_gagnée = Q_perdue", "C) Q_gagnée = 0", "D) Q_perdue = 0"],
+                                reponse: "A", explication: "Q_gagnée + Q_perdue = 0." },
+                            { id: 25, question: "La chaleur latente L est :", options: ["A) La chaleur pour changer de température.", "B) La chaleur pour changer d'état sans changer de température.", "C) La chaleur pour vaporiser.", "D) La capacité thermique."],
+                                reponse: "B", explication: "La chaleur latente est pour un changement d'état sans variation de température." }
+                        ] }
+                ]
+            },
+            "1D_optique": {
+                titre: "Optique Géométrique",
+                niveau: "1ere",
+                serie: "D",
+                icone: "🔦",
+                lecons: [
+                    { titre: "Lentilles minces - définitions", objectif: "Connaître les définitions des lentilles", questions: [
+                            { id: 1, question: "Une lentille convergente a une vergence :", options: ["A) Positive.", "B) Négative.", "C) Nulle.", "D) Variable."],
+                                reponse: "A", explication: "Une lentille convergente a une vergence positive." },
+                            { id: 2, question: "Une lentille divergente a une vergence :", options: ["A) Positive.", "B) Négative.", "C) Nulle.", "D) Variable."],
+                                reponse: "B", explication: "Une lentille divergente a une vergence négative." },
+                            { id: 3, question: "La vergence est définie par :", options: ["A) C = f'", "B) C = 1/f'", "C) C = -1/f'", "D) C = f'²"],
+                                reponse: "B", explication: "C = 1/f'." },
+                            { id: 4, question: "Une lentille de f'=0,25m a C = ?", options: ["A) 0,25 δ", "B) 4 δ", "C) -4 δ", "D) 25 δ"],
+                                reponse: "B", explication: "C = 1/0,25 = 4 δ." },
+                            { id: 5, question: "Les conditions de Gauss sont :", options: ["A) Rayons parallèles.", "B) Rayons peu inclinés et proches de l'axe.", "C) Lentille convergente.", "D) Lentille divergente."],
+                                reponse: "B", explication: "Les conditions de Gauss : rayons paraxiaux." }
+                        ] },
+                    { titre: "Construction d'images", objectif: "Savoir construire les images", questions: [
+                            { id: 6, question: "Un objet à 2f donne une image :", options: ["A) À l'infini.", "B) À 2f' de l'autre côté.", "C) Au foyer F'.", "D) Entre F' et 2f'."],
+                                reponse: "B", explication: "L'image se forme à 2f'." },
+                            { id: 7, question: "Un objet entre F et O donne une image :", options: ["A) Réelle et renversée.", "B) Virtuelle et droite.", "C) Réelle et droite.", "D) Virtuelle et renversée."],
+                                reponse: "B", explication: "Image virtuelle, droite et agrandie." },
+                            { id: 8, question: "Un objet au foyer F donne une image :", options: ["A) À l'infini.", "B) À 2f'.", "C) Au foyer F'.", "D) Virtuelle."],
+                                reponse: "A", explication: "L'image est à l'infini." },
+                            { id: 9, question: "Un objet à l'infini donne une image :", options: ["A) À l'infini.", "B) Au foyer F'.", "C) À 2f'.", "D) Virtuelle."],
+                                reponse: "B", explication: "L'image est au foyer F'." },
+                            { id: 10, question: "Une lentille divergente donne une image :", options: ["A) Réelle et renversée.", "B) Virtuelle et droite.", "C) Réelle et droite.", "D) Virtuelle et renversée."],
+                                reponse: "B", explication: "Image virtuelle, droite et plus petite." }
+                        ] },
+                    { titre: "Formules des lentilles", objectif: "Maîtriser les formules des lentilles", questions: [
+                            { id: 11, question: "La relation de conjugaison est :", options: ["A) 1/OA' - 1/OA = 1/f'", "B) 1/OA + 1/OA' = 1/f'", "C) OA×OA' = f'²", "D) OA' - OA = f'"],
+                                reponse: "A", explication: "Formule de Descartes." },
+                            { id: 12, question: "Le grandissement γ est :", options: ["A) γ = OA/OA'", "B) γ = OA'/OA", "C) γ = A'B'/AB", "D) γ = AB/A'B'"],
+                                reponse: "C", explication: "γ = A'B'/AB." },
+                            { id: 13, question: "Un rayon passant par le centre optique :", options: ["A) Est dévié.", "B) N'est pas dévié.", "C) Est réfléchi.", "D) Est absorbé."],
+                                reponse: "B", explication: "Il n'est pas dévié." },
+                            { id: 14, question: "Le foyer image F' est :", options: ["A) Le point de convergence des rayons parallèles.", "B) Le point de divergence.", "C) Le centre de la lentille.", "D) Le point de réflexion."],
+                                reponse: "A", explication: "F' est le point de convergence des rayons parallèles." },
+                            { id: 15, question: "Le théorème des vergences pour deux lentilles accolées est :", options: ["A) C = C₁ + C₂", "B) C = C₁ - C₂", "C) 1/C = 1/C₁ + 1/C₂", "D) C = C₁×C₂"],
+                                reponse: "A", explication: "Les vergences s'ajoutent : C = C₁ + C₂." }
+                        ] },
+                    { titre: "L'œil et ses défauts", objectif: "Comprendre l'œil et ses défauts", questions: [
+                            { id: 16, question: "Dans l'œil réduit, le cristallin est :", options: ["A) Un miroir.", "B) Une lentille convergente de vergence variable.", "C) Un prisme.", "D) Un diaphragme."],
+                                reponse: "B", explication: "Le cristallin est une lentille convergente de vergence variable." },
+                            { id: 17, question: "Un œil myope a un PR :", options: ["A) À l'infini.", "B) À une distance finie.", "C) À 25 cm.", "D) À 2 m."],
+                                reponse: "B", explication: "Le PR est à une distance finie." },
+                            { id: 18, question: "La presbytie est due à :", options: ["A) Un œil trop long.", "B) Un œil trop court.", "C) Une perte d'accommodation avec l'âge.", "D) Une cornée trop courbée."],
+                                reponse: "C", explication: "La presbytie est due à la perte d'accommodation." },
+                            { id: 19, question: "L'hypermétropie se corrige avec :", options: ["A) Une lentille divergente.", "B) Une lentille convergente.", "C) Un prisme.", "D) Un miroir."],
+                                reponse: "B", explication: "L'hypermétropie se corrige avec une lentille convergente." },
+                            { id: 20, question: "Le punctum proximum (PP) est :", options: ["A) Le point le plus éloigné vu nettement.", "B) Le point le plus proche vu nettement.", "C) Le centre de l'œil.", "D) Le foyer de l'œil."],
+                                reponse: "B", explication: "Le PP est le point le plus proche vu nettement." }
+                        ] },
+                    { titre: "Instruments et sources lumineuses", objectif: "Connaître les instruments et les sources", questions: [
+                            { id: 21, question: "Le microscope est composé de :", options: ["A) L'objectif et l'oculaire.", "B) Le miroir et la lentille.", "C) Le condensateur et l'oculaire.", "D) L'objectif et le prisme."],
+                                reponse: "A", explication: "Microscope : objectif + oculaire." },
+                            { id: 22, question: "Une source monochromatique émet :", options: ["A) Une seule couleur.", "B) Toutes les couleurs.", "C) De la lumière blanche.", "D) Des rayons infrarouges."],
+                                reponse: "A", explication: "Une source monochromatique émet une seule couleur." },
+                            { id: 23, question: "La loi de Wien relie T à :", options: ["A) λ_max", "B) v", "C) f", "D) Q"],
+                                reponse: "A", explication: "λ_max × T = constante." },
+                            { id: 24, question: "Un spectre continu est émis par :", options: ["A) Un gaz raréfié.", "B) Un corps solide chauffé.", "C) Un laser.", "D) Une lampe à vapeur."],
+                                reponse: "B", explication: "Un corps solide chauffé émet un spectre continu." },
+                            { id: 25, question: "Le grossissement d'un microscope est :", options: ["A) Le produit des grossissements.", "B) La somme des grossissements.", "C) La différence des grossissements.", "D) Le rapport des grossissements."],
+                                reponse: "A", explication: "G = G_objectif × G_oculaire." }
+                        ] }
+                ]
+            },
+            "1D_electricite": {
+                titre: "Bilan Énergétique des Circuits",
+                niveau: "1ere",
+                serie: "D",
+                icone: "⚡",
+                lecons: [
+                    { titre: "Générateurs et récepteurs", objectif: "Comprendre les générateurs et récepteurs", questions: [
+                            { id: 1, question: "U = E - r×I est la tension d'un :", options: ["A) Générateur.", "B) Récepteur.", "C) Résistor.", "D) Condensateur."],
+                                reponse: "A", explication: "U = E - r×I est la tension d'un générateur." },
+                            { id: 2, question: "La f.é.m. E est :", options: ["A) La tension à vide.", "B) La tension en charge.", "C) La tension de court-circuit.", "D) La puissance."],
+                                reponse: "A", explication: "E est la tension à vide." },
+                            { id: 3, question: "U = E' + r'×I est la tension d'un :", options: ["A) Générateur.", "B) Récepteur.", "C) Résistor.", "D) Condensateur."],
+                                reponse: "B", explication: "U = E' + r'×I est la tension d'un récepteur." },
+                            { id: 4, question: "Un moteur électrique est un :", options: ["A) Générateur.", "B) Récepteur.", "C) Résistor.", "D) Condensateur."],
+                                reponse: "B", explication: "Un moteur est un récepteur." },
+                            { id: 5, question: "L'ordonnée à l'origine de U=f(I) d'un générateur est :", options: ["A) r", "B) E", "C) I", "D) P"],
+                                reponse: "B", explication: "L'ordonnée à l'origine est E." }
+                        ] },
+                    { titre: "Point de fonctionnement et loi de Pouillet", objectif: "Déterminer le point de fonctionnement", questions: [
+                            { id: 6, question: "Le point de fonctionnement est :", options: ["A) L'intersection des caractéristiques.", "B) La valeur de la résistance.", "C) La tension à vide.", "D) La puissance maximale."],
+                                reponse: "A", explication: "C'est l'intersection des caractéristiques." },
+                            { id: 7, question: "La loi de Pouillet est :", options: ["A) I = (E - E')/(r + r')", "B) I = (E + E')/(r + r')", "C) I = (E - E')×(r + r')", "D) I = (E' - E)/(r + r')"],
+                                reponse: "A", explication: "I = (E - E')/(r + r')." },
+                            { id: 8, question: "Deux générateurs en série ont E_eq = :", options: ["A) E", "B) 2E", "C) E/2", "D) 0"],
+                                reponse: "B", explication: "E_eq = E₁ + E₂ = 2E." },
+                            { id: 9, question: "Deux générateurs en parallèle ont E_eq = :", options: ["A) E", "B) 2E", "C) E/2", "D) 0"],
+                                reponse: "A", explication: "E_eq = E." },
+                            { id: 10, question: "Des résistances en série ont R_eq = :", options: ["A) R₁ + R₂", "B) 1/R₁ + 1/R₂", "C) R₁×R₂/(R₁+R₂)", "D) R₁×R₂"],
+                                reponse: "A", explication: "R_eq = R₁ + R₂." }
+                        ] },
+                    { titre: "Induction électromagnétique", objectif: "Comprendre l'induction", questions: [
+                            { id: 11, question: "L'induction a été découverte par :", options: ["A) Ampère.", "B) Faraday.", "C) Ohm.", "D) Newton."],
+                                reponse: "B", explication: "Michael Faraday (1831)." },
+                            { id: 12, question: "La loi de Lenz énonce que le courant induit s'oppose :", options: ["A) À la cause.", "B) Au champ extérieur.", "C) À la résistance.", "D) À la tension."],
+                                reponse: "A", explication: "Le courant induit s'oppose à la cause." },
+                            { id: 13, question: "Un alternateur convertit :", options: ["A) L'électrique en mécanique.", "B) La mécanique en électrique.", "C) L'électrique en thermique.", "D) La thermique en électrique."],
+                                reponse: "B", explication: "L'alternateur convertit la mécanique en électrique." },
+                            { id: 14, question: "Le flux magnétique est :", options: ["A) Φ = B×S", "B) Φ = B×S×cos θ", "C) Φ = B/S", "D) Φ = S/B"],
+                                reponse: "B", explication: "Φ = B×S×cos θ." },
+                            { id: 15, question: "L'auto-induction est :", options: ["A) L'induction par un autre circuit.", "B) L'induction par lui-même.", "C) L'induction d'un champ.", "D) L'induction d'un courant."],
+                                reponse: "B", explication: "L'auto-induction est l'induction d'un circuit par lui-même." }
+                        ] },
+                    { titre: "Énergie et puissance électrique", objectif: "Calculer l'énergie et la puissance", questions: [
+                            { id: 16, question: "L'énergie électrique est :", options: ["A) E = P×t", "B) E = U×I", "C) E = R×I²", "D) E = U/I"],
+                                reponse: "A", explication: "E = P×t." },
+                            { id: 17, question: "La loi de Joule est :", options: ["A) P = U×I", "B) P = R×I²", "C) P = E×I", "D) P = U/R"],
+                                reponse: "B", explication: "P = R×I²." },
+                            { id: 18, question: "La puissance reçue par un récepteur est :", options: ["A) P = U×I", "B) P = E'×I", "C) P = r'×I²", "D) P = U×I - r'×I²"],
+                                reponse: "A", explication: "P = U×I." },
+                            { id: 19, question: "Le rendement est :", options: ["A) η = Putile/Ptotale", "B) η = Ptotale/Putile", "C) η = Ptotale - Putile", "D) η = Putile×Ptotale"],
+                                reponse: "A", explication: "η = Putile/Ptotale." },
+                            { id: 20, question: "La puissance dissipée par effet Joule est :", options: ["A) P = U×I", "B) P = R×I²", "C) P = E×I", "D) P = U/R"],
+                                reponse: "B", explication: "P = R×I²." }
+                        ] }
+                ]
+            }
+        };
+
+        // ================================================================
+        // FONCTIONS DE L'APPLICATION
+        // ================================================================
+        let etat = {
+            eleve: { nom: "", niveau: "1ere", serie: "D" },
+            moduleActuel: null,
+            leconActuelle: null,
+            questionActuelle: 0,
+            reponses: [],
+            score: 0,
+            total: 0,
+            quizTermine: false,
+            filtreSerie: "D",
+            leconsCompleted: {},
+            modeIntegration: false
+        };
+
+        function showPage(id) {
+            document.querySelectorAll('[id^="page-"]').forEach(p => p.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+            document.querySelector('.container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function enregistrerProfil() {
+            const nom = document.getElementById('nom').value.trim();
+            const niveau = document.getElementById('niveau').value;
+            const serie = document.getElementById('serie').value;
+            if (!nom) { alert("Veuillez entrer votre nom."); return; }
+            etat.eleve = { nom, niveau, serie };
+            document.getElementById('eleve-nom-module').textContent = nom;
+            etat.filtreSerie = serie;
+            document.querySelectorAll('.btn-filtre').forEach(b => b.classList.toggle('active', b.dataset.filtre === serie));
+            afficherModules(niveau, serie);
+            afficherProgressionModules();
+            sauvegarderProgression();
+            showPage('page-modules');
+        }
+
+        function getModulesPourNiveauSerie(niveau, serie) {
+            const prefix = niveau === "1ere" ? "1" : "T";
+            if (serie === "C" && niveau === "Terminale") return [];
+            const keys = Object.keys(modulesData).filter(k => k.startsWith(prefix + serie));
+            return keys.map(k => ({ key: k, ...modulesData[k] }));
+        }
+
+        function afficherModules(niveau, serie) {
+            const modules = getModulesPourNiveauSerie(niveau, serie);
+            const container = document.getElementById('module-grid-container');
+            if (modules.length === 0) {
+                container.innerHTML =
+                    `<p style="text-align:center;color:#888;padding:20px;">📌 Modules pour ${niveau} ${serie} disponibles prochainement.</p>`;
+                return;
+            }
+            let html = '<div class="module-grid">';
+            modules.forEach(mod => {
+                const badgeClasse = mod.serie === 'C' ? 'badge-serie-c' : (mod.serie === 'TI' ? 'badge-serie-ti' :
+                    'badge-serie-d');
+                html += `
+                    <button class="btn btn-module" onclick="ouvrirModule('${mod.key}')">
+                        <span class="icon">${mod.icone}</span>
+                        <span class="titre-module">${mod.titre}</span>
+                        <span class="sous-titre">${mod.lecons.length} leçons</span>
+                        <span class="niveau-badge ${badgeClasse}">${mod.niveau} ${mod.serie}</span>
+                    </button>
+                `;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        function changerFiltre(serie) {
+            if (serie === "TC") { alert("📌 Terminale C disponible prochainement."); return; }
+            etat.filtreSerie = serie;
+            document.querySelectorAll('.btn-filtre').forEach(b => b.classList.toggle('active', b.dataset.filtre === serie));
+            afficherModules(etat.eleve.niveau, serie);
+        }
+
+        function ouvrirModule(moduleKey) {
+            const module = modulesData[moduleKey];
+            if (!module) return;
+            etat.moduleActuel = moduleKey;
+            document.getElementById('lecon-module-titre').textContent = `${module.icone} ${module.titre}`;
+
+            let html = '';
+            module.lecons.forEach((lecon, index) => {
+                const num = index + 1;
+                const completed = etat.leconsCompleted[`${moduleKey}_lecon_${index}`] || false;
+                html += `
+                    <button class="btn-lecon ${completed ? 'completed' : ''}" onclick="demarrerLecon('${moduleKey}', ${index})">
+                        <span class="lecon-num">${num}</span>
+                        <span class="lecon-titre">${lecon.titre}</span>
+                        <span class="lecon-objectif">${lecon.objectif}</span>
+                        <span class="lecon-q">${lecon.questions.length} questions</span>
+                    </button>
+                `;
+            });
+            document.getElementById('lecon-grid-container').innerHTML = html;
+
+            const total = module.lecons.length;
+            const completed = Object.keys(etat.leconsCompleted).filter(k => k.startsWith(moduleKey) && etat.leconsCompleted[k])
+                .length;
+            const progress = total > 0 ? Math.round((completed / total) * 100) : 0;
+            document.getElementById('lecon-progress-bar').style.width = progress + '%';
+            document.getElementById('lecon-progress-bar').textContent = progress + '%';
+            showPage('page-lecons');
+        }
+
+        function retourLecons() {
+            if (etat.moduleActuel) ouvrirModule(etat.moduleActuel);
+            else showPage('page-modules');
+        }
+
+        function demarrerLecon(moduleKey, leconIndex) {
+            const module = modulesData[moduleKey];
+            if (!module) return;
+            const lecon = module.lecons[leconIndex];
+            if (!lecon) return;
+
+            etat.moduleActuel = moduleKey;
+            etat.leconActuelle = leconIndex;
+            etat.questionActuelle = 0;
+            etat.total = lecon.questions.length;
+            etat.reponses = new Array(etat.total).fill(null);
+            etat.score = 0;
+            etat.quizTermine = false;
+            etat.modeIntegration = false;
+
+            document.getElementById('quiz-lecon-titre').textContent = `📖 ${lecon.titre}`;
+            document.getElementById('quiz-module-nom').textContent = `${module.icone} ${module.titre}`;
+            showPage('page-quiz');
+            afficherQuestion();
+        }
+
+        function afficherQuestion() {
+            if (etat.questionActuelle >= etat.total) { terminerLecon(); return; }
+            const module = modulesData[etat.moduleActuel];
+            const lecon = module.lecons[etat.leconActuelle];
+            const q = lecon.questions[etat.questionActuelle];
+            const idx = etat.questionActuelle;
+
+            document.getElementById('question-progress').textContent = `${idx+1} / ${etat.total}`;
+
+            let html = '';
+            q.options.forEach((opt, i) => {
+                const lettre = String.fromCharCode(65 + i);
+                const checked = etat.reponses[idx] === i ? 'checked' : '';
+                html += `
+                    <div class="option-item ${checked ? 'selected' : ''}" onclick="selectionnerOption(${idx}, ${i})">
+                        <input type="radio" name="question_${idx}" id="opt_${idx}_${i}" value="${i}" ${checked}>
+                        <label for="opt_${idx}_${i}"><span class="lettre">${lettre})</span> ${opt}</label>
+                    </div>
+                `;
+            });
+            document.getElementById('question-container').innerHTML =
+                `<div class="question-text">${q.question}</div><div class="options-list">${html}</div>`;
+
+            document.getElementById('correction-container').classList.add('hidden');
+            document.getElementById('correction-container').innerHTML = '';
+
+            const actions = document.getElementById('question-actions');
+            if (etat.reponses[idx] !== null) {
+                afficherCorrection(idx);
+                actions.innerHTML =
+                    `<button class="btn btn-primary" onclick="questionSuivante()">➡️ Question suivante</button>`;
+            } else {
+                actions.innerHTML = `<button class="btn btn-success" onclick="validerReponse()">✅ Valider ma réponse</button>`;
+            }
+        }
+
+        function selectionnerOption(idxQuestion, idxOption) {
+            if (etat.reponses[idxQuestion] !== null) return;
+            const container = document.getElementById('question-container');
+            const items = container.querySelectorAll('.option-item');
+            items.forEach((item, i) => {
+                const radio = item.querySelector('input[type="radio"]');
+                if (i === idxOption) { item.classList.add('selected');
+                    radio.checked = true; } else { item.classList.remove('selected');
+                    radio.checked = false; }
+            });
+            container.dataset.selected = idxOption;
+        }
+
+        function validerReponse() {
+            const idx = etat.questionActuelle;
+            const container = document.getElementById('question-container');
+            const selected = container.dataset.selected;
+            if (selected === undefined || selected === '') { alert("Veuillez sélectionner une réponse."); return; }
+
+            const idxOption = parseInt(selected);
+            const module = modulesData[etat.moduleActuel];
+            const lecon = module.lecons[etat.leconActuelle];
+            const q = lecon.questions[idx];
+            const estCorrecte = idxOption === parseInt(q.reponse);
+
+            etat.reponses[idx] = idxOption;
+            if (estCorrecte) etat.score++;
+
+            document.querySelectorAll('.option-item input[type="radio"]').forEach(r => r.disabled = true);
+            document.querySelectorAll('.option-item').forEach(item => item.style.cursor = 'default');
+
+            afficherCorrection(idx);
+            document.getElementById('question-actions').innerHTML =
+                `<button class="btn btn-primary" onclick="questionSuivante()">➡️ Question suivante</button>`;
+        }
+
+        function afficherCorrection(idx) {
+            const module = modulesData[etat.moduleActuel];
+            const lecon = module.lecons[etat.leconActuelle];
+            const q = lecon.questions[idx];
+            const estCorrecte = etat.reponses[idx] === parseInt(q.reponse);
+            const bonneReponse = q.options[parseInt(q.reponse)];
+            const lettre = String.fromCharCode(65 + parseInt(q.reponse));
+
+            const container = document.getElementById('correction-container');
+            container.classList.remove('hidden');
+            container.className = `correction-box ${estCorrecte ? 'correct' : 'incorrect'}`;
+            container.innerHTML = `
+                <div class="status ${estCorrecte ? 'correct' : 'incorrect'}">${estCorrecte ? '✅ Bonne réponse !' : '❌ Réponse incorrecte'}</div>
+                <div class="explication"><strong>🔍 Explication :</strong><br>${q.explication}${!estCorrecte ? `<br><br><strong>✅ La bonne réponse était :</strong> ${lettre}) ${bonneReponse}` : ''}</div>
+            `;
+        }
+
+        function questionSuivante() {
+            etat.questionActuelle++;
+            if (etat.questionActuelle >= etat.total) terminerLecon();
+            else afficherQuestion();
+        }
+
+        function terminerLecon() {
+            etat.quizTermine = true;
+            if (etat.leconActuelle >= 0) {
+                const key = `${etat.moduleActuel}_lecon_${etat.leconActuelle}`;
+                etat.leconsCompleted[key] = true;
+                sauvegarderProgression();
+            }
+            showPage('page-resultats-lecon');
+            document.getElementById('score-display-lecon').innerHTML = `${etat.score} <small>/ ${etat.total}</small>`;
+            document.getElementById('result-nom-lecon').textContent = etat.eleve.nom;
+            document.getElementById('result-juste-lecon').textContent = etat.score;
+            document.getElementById('result-faux-lecon').textContent = etat.total - etat.score;
+
+            const module = modulesData[etat.moduleActuel];
+            const lecon = module.lecons[etat.leconActuelle];
+            document.getElementById('result-lecon-nom').textContent = `📖 ${lecon.titre}`;
+        }
+
+        function envoyerWhatsApp() {
+            const eleve = etat.eleve;
+            const module = modulesData[etat.moduleActuel];
+            const lecon = module.lecons[etat.leconActuelle];
+            const score = etat.score;
+            const total = etat.total;
+
+            let message = `📊 *Résultats - Physique*%0A`;
+            message += `%0A👨‍🏫 *Professeur :* Mr Ndjana a Bidias`;
+            message += `%0A%0A👤 *Élève :* ${eleve.nom}`;
+            message += `%0A📚 *Niveau :* ${eleve.niveau} ${eleve.serie}`;
+            message += `%0A📖 *Module :* ${module.icone} ${module.titre}`;
+            message += `%0A📝 *Leçon :* ${lecon.titre}`;
+            message += `%0A%0A🎯 *Score :* ${score} / ${total}`;
+            message += `%0A✅ *Bonnes réponses :* ${score}`;
+            message += `%0A❌ *Mauvaises réponses :* ${total - score}`;
+            message += `%0A%0A📅 *Date :* ${new Date().toLocaleDateString('fr-FR')}`;
+
+            lecon.questions.forEach((q, i) => {
+                const rep = etat.reponses[i];
+                const estCorrecte = rep === parseInt(q.reponse);
+                const repText = rep !== null ? q.options[rep] : 'Non répondue';
+                const bonneText = q.options[parseInt(q.reponse)];
+                message += `%0A${i+1}. ${q.question.substring(0,45)}...`;
+                message += `%0A   Réponse : ${repText}`;
+                message += `%0A   Correcte : ${estCorrecte ? '✅' : '❌ (Attendue: ' + bonneText + ')'}`;
+            });
+
+            window.open(`https://wa.me/${NUMERO_WHATSAPP}?text=${message}`, '_blank');
+        }
+
+        // ================================================================
+        // INITIALISATION
+        // ================================================================
+        document.querySelectorAll('.btn-filtre').forEach(b => {
+            b.dataset.filtre = b.textContent.replace('Série ', '').replace(' 🔜', '').trim();
+        });
+        chargerProgression();
+        afficherProgressionAccueil();
+        showPage('page-accueil');
+
+        console.log('✅ Application prête !');
+        console.log('👤 Élève:', etat.eleve.nom || 'Non connecté');
+        console.log('📊 Progression:', getProgressionStats().completed, 'leçons complétées');
+    </script>Ajout de l'application de physique interactive
+</body>Ajout de l'application de physique interactive
+</html>Ajout de l'application de physique interactive
