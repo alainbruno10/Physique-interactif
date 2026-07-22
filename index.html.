@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physique Interactif - Mr Ndjana a Bidias</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,sans-serif}
+        body{background:linear-gradient(135deg,#1a2a6c,#b21f1f,#fdbb2d);min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px}
+        .container{background:rgba(255,255,255,0.95);border-radius:25px;padding:30px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.5);min-height:400px}
+        .enseignant-info{text-align:center;margin-bottom:25px;padding-bottom:15px;border-bottom:3px solid #1a2a6c}
+        .enseignant-info h1{font-size:1.3rem;color:#1a2a6c}
+        .enseignant-info h2{font-size:1.1rem;color:#b21f1f}
+        .enseignant-info .numero{display:inline-block;background:#25d366;color:white;padding:5px 15px;border-radius:20px;font-size:0.8rem;margin-top:5px}
+        .btn{display:block;padding:15px;border:none;border-radius:30px;font-size:1rem;font-weight:600;cursor:pointer;width:100%;text-align:center;margin:8px 0}
+        .btn-primary{background:#1a2a6c;color:white}
+        .btn-success{background:#28a745;color:white}
+        .btn-danger{background:#dc3545;color:white}
+        .btn-outline{background:transparent;color:#1a2a6c;border:2px solid #1a2a6c}
+        .btn-whatsapp{background:#25d366;color:white}
+        .hidden{display:none !important}
+        .mt-20{margin-top:20px}
+        .form-group{margin-bottom:15px}
+        .form-group label{display:block;font-weight:600;color:#333;margin-bottom:5px;font-size:0.9rem}
+        .form-group input,.form-group select{width:100%;padding:12px 14px;border:2px solid #ddd;border-radius:10px;font-size:1rem;background:#f8f9fa}
+        .module-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+        .btn-module{padding:15px;border-radius:12px;border:2px solid #e9ecef;background:#f8f9fa;cursor:pointer;text-align:center}
+        .btn-module .icon{font-size:1.5rem;display:block}
+        .btn-module .titre-module{font-weight:700;font-size:0.8rem;color:#1a2a6c}
+        .question-text{font-size:1rem;color:#222;font-weight:500;margin-bottom:15px}
+        .options-list{display:flex;flex-direction:column;gap:8px;margin-bottom:15px}
+        .option-item{display:flex;align-items:center;gap:12px;padding:10px 14px;background:#f8f9fa;border-radius:10px;border:2px solid #e9ecef;cursor:pointer}
+        .option-item.selected{background:#d4e0ff;border-color:#1a2a6c}
+        .option-item input[type=radio]{width:16px;height:16px;accent-color:#1a2a6c}
+        .option-item label{cursor:pointer;font-size:0.9rem;flex:1}
+        .correction-box{margin:15px 0;padding:15px;border-radius:10px;border-left:5px solid #1a2a6c}
+        .correction-box.correct{background:#e8f5e9;border-left-color:#28a745}
+        .correction-box.incorrect{background:#fce4ec;border-left-color:#dc3545}
+        .correction-box .status{font-weight:700}
+        .correction-box .explication{font-size:0.85rem;margin-top:5px}
+        .score-circle{width:100px;height:100px;border-radius:50%;background:#1a2a6c;color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:15px auto;font-size:2rem;font-weight:700}
+        .badge{display:inline-block;background:#1a2a6c;color:white;padding:3px 12px;border-radius:20px;font-size:0.75rem}
+        .question-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;padding-bottom:10px;border-bottom:2px solid #eee}
+        .lecon-grid{display:grid;gap:10px;margin:10px 0}
+        .btn-lecon{padding:12px;border-radius:10px;border:2px solid #e9ecef;background:#f8f9fa;cursor:pointer;text-align:center}
+        .btn-lecon .lecon-num{display:inline-block;background:#1a2a6c;color:white;border-radius:50%;width:24px;height:24px;line-height:24px;font-size:0.7rem;font-weight:700;margin-bottom:3px}
+        .btn-lecon .lecon-titre{font-weight:600;font-size:0.8rem;color:#1a2a6c;display:block}
+        .btn-lecon.completed{border-color:#28a745;background:#e8f5e9}
+        .btn-lecon.completed::after{content:" ✅";color:#28a745}
+        .filtres-container{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;justify-content:center}
+        .filtres-container .btn-filtre{padding:6px 14px;border:2px solid #1a2a6c;border-radius:20px;background:white;color:#1a2a6c;font-weight:600;font-size:0.7rem;cursor:pointer}
+        .filtres-container .btn-filtre.active{background:#1a2a6c;color:white}
+        .progression-info{text-align:center;font-size:0.8rem;color:#555;padding:8px;background:#f8f9fa;border-radius:8px;border:1px solid #e9ecef;margin-bottom:10px}
+        .progress-bar-container{background:#e9ecef;border-radius:20px;height:16px;margin:8px 0;overflow:hidden}
+        .progress-bar{background:linear-gradient(90deg,#1a2a6c,#fdbb2d);height:100%;border-radius:20px;transition:width 0.5s;display:flex;align-items:center;justify-content:center;color:white;font-size:0.6rem;font-weight:600}
+        .result-detail{text-align:center;font-size:0.9rem}
+        @media(max-width:500px){.module-grid{grid-template-columns:1fr}.container{padding:20px}}
+    </style>
+</head>
+<body>
+<div class="container" id="app">
+    <div id="page-accueil">
+        <div class="enseignant-info">
+            <h1>👨‍🏫 Mr Ndjana a Bidias</h1>
+            <h2>PHYSIQUE</h2>
+            <div class="numero">📱 WhatsApp : 694 723 256</div>
+        </div>
+        <div style="text-align:center;margin:15px 0;font-size:0.9rem;color:#555;">Bienvenue !</div>
+        <button class="btn btn-primary" onclick="demarrer()">🚀 Commencer</button>
+        <button class="btn btn-outline mt-20" onclick="reinitialiser()">🗑️ Réinitialiser</button>
+    </div>
+    <div id="page-profil" class="hidden">
+        <h2 style="text-align:center;color:#1a2a6c;margin-bottom:20px;">📋 Profil</h2>
+        <div class="form-group"><label>Nom</label><input type="text" id="nom" placeholder="Votre nom"></div>
+        <div class="form-group"><label>Niveau</label><select id="niveau"><option value="1ere">1ère</option><option value="Terminale">Terminale</option></select></div>
+        <div class="form-group"><label>Série</label><select id="serie"><option value="D">D</option><option value="C">C</option><option value="TI">TI</option></select></div>
+        <button class="btn btn-success" onclick="enregistrer()">✅ Continuer</button>
+        <button class="btn btn-danger mt-20" onclick="showPage('page-accueil')">⬅ Retour</button>
+    </div>
+    <div id="page-modules" class="hidden">
+        <h2 style="text-align:center;color:#1a2a6c;font-size:1.1rem;">📚 Modules</h2>
+        <p style="text-align:center;font-size:0.8rem;color:#555;">Bonjour <span id="eleve-nom" style="font-weight:600;color:#1a2a6c;"></span> !</p>
+        <div id="progression-resume" class="progression-info"></div>
+        <div class="filtres-container">
+            <button class="btn-filtre serie-d active" data-filtre="D" onclick="changerFiltre('D')">D</button>
+            <button class="btn-filtre serie-c" data-filtre="C" onclick="changerFiltre('C')">C</button>
+            <button class="btn-filtre serie-ti" data-filtre="TI" onclick="changerFiltre('TI')">TI</button>
+        </div>
+        <div id="module-grid"></div>
+        <button class="btn btn-danger mt-20" onclick="showPage('page-profil')">⬅ Profil</button>
+    </div>
+    <div id="page-lecons" class="hidden">
+        <h2 style="text-align:center;color:#1a2a6c;font-size:1rem;" id="lecon-module-titre">Module</h2>
+        <div class="progress-bar-container"><div class="progress-bar" id="progress-bar" style="width:0%;">0%</div></div>
+        <div id="lecon-grid" class="lecon-grid"></div>
+        <button class="btn btn-danger mt-20" onclick="showPage('page-modules')">⬅ Retour</button>
+    </div>
+    <div id="page-quiz" class="hidden">
+        <div class="question-header">
+            <span style="font-weight:600;font-size:0.8rem;color:#1a2a6c;" id="quiz-titre">Leçon</span>
+            <span class="badge" id="quiz-progress">1/5</span>
+        </div>
+        <div style="font-size:0.7rem;color:#888;" id="quiz-module"></div>
+        <div id="question-container"></div>
+        <div id="correction-container" class="hidden"></div>
+        <div id="question-actions" class="mt-20"></div>
+    </div>
+    <div id="page-resultats" class="hidden">
+        <h2 style="text-align:center;color:#1a2a6c;font-size:1rem;">📊 Résultats</h2>
+        <p style="text-align:center;font-size:0.8rem;color:#555;" id="result-titre"></p>
+        <div class="score-circle" id="score-display">0 <small>/5</small></div>
+        <div class="result-detail">
+            <p><span id="result-nom"></span>, votre score :</p>
+            <p>✅ <span id="result-juste" style="color:#28a745;">0</span> | ❌ <span id="result-faux" style="color:#dc3545;">0</span></p>
+        </div>
+        <button class="btn btn-whatsapp" onclick="envoyer()">📱 Envoyer</button>
+        <button class="btn btn-primary mt-10" onclick="retour()">📚 Retour</button>
+    </div>
+</div>
+<script>
+const NUMERO_WHATSAPP="237694723256";
+const modulesData={
+"1D_mesures":{titre:"Mesures et Incertitudes",niveau:"1ere",serie:"D",icone:"📏",lecons:[
+{titre:"Incertitude",questions:[
+{q:"Qu'est-ce que l'incertitude ?",o:["Erreur","Intervalle contenant la valeur vraie","Différence","Précision"],r:1,e:"L'incertitude est l'intervalle contenant la valeur vraie."},
+{q:"Erreur systématique :",o:["Variable","Toujours du même signe","Due à la résolution","Négligeable"],r:1,e:"L'erreur systématique est constante."},
+{q:"Erreur aléatoire due à :",o:["Défaut","Fluctuations","Mauvaise utilisation","Erreur calcul"],r:1,e:"Due à des fluctuations."},
+{q:"Valeur vraie :",o:["Mesurée","Théorique","Moyenne","Affichée"],r:1,e:"Valeur théorique inconnue."},
+{q:"12,5 ± 0,2 cm : 0,2 est :",o:["Erreur lecture","Incertitude élargie","Écart-type","Résolution"],r:1,e:"0,2 est l'incertitude élargie."}
+]},
+{titre:"Qualités d'un instrument",questions:[
+{q:"La fidélité est :",o:["Proche vraie","Reproductible","Détecter variations","Stable"],r:1,e:"Fidélité = reproductibilité."},
+{q:"La sensibilité est :",o:["Plus petite variation","Écart","Stabilité","Rapidité"],r:0,e:"Sensibilité = plus petite variation."},
+{q:"La justesse est :",o:["Reproductible","Proche vraie","Détecter variations","Stable"],r:1,e:"Justesse = proche de la vraie."},
+{q:"La résolution est :",o:["Plus petite variation","Plus grande valeur","Rapidité","Stabilité"],r:0,e:"Résolution = plus petite variation."},
+{q:"La portée est :",o:["Petite valeur","Grande valeur","Étendue","Précision"],r:2,e:"Portée = étendue des valeurs."}
+]}
+]},
+"1D_mecanique":{titre:"Mécanique",niveau:"1ere",serie:"D",icone:"⚙️",lecons:[
+{titre:"Travail d'une force",questions:[
+{q:"Travail d'une force constante :",o:["W=F×AB","W=F·AB","W=F×AB","W=F/AB"],r:1,e:"W = F·AB."},
+{q:"Travail du poids en descente :",o:["Nul","Positif","Négatif","Variable"],r:1,e:"Le poids est dans le sens → positif."},
+{q:"Travail du poids en montée :",o:["Nul","Positif","Négatif","Variable"],r:2,e:"Le poids s'oppose → négatif."},
+{q:"Force conservative :",o:["Dépend chemin","Dépend positions","Toujours nulle","Toujours positive"],r:1,e:"Indépendant du chemin."},
+{q:"Travail d'un couple M :",o:["W=M×θ","W=M/θ","W=θ/M","W=M×θ²"],r:0,e:"W = M×θ."}
+]},
+{titre:"Puissance",questions:[
+{q:"Puissance moyenne :",o:["P=W×Δt","P=W/Δt","P=Δt/W","P=F×v"],r:1,e:"P = W/Δt."},
+{q:"W=600J en 30s : P=?",o:["20W","30W","180W","18000W"],r:0,e:"600/30 = 20W."},
+{q:"Unité de puissance :",o:["Joule","Watt","Newton","Pascal"],r:1,e:"L'unité est le Watt."},
+{q:"Puissance instantanée :",o:["P=F×v","P=F/v","P=m×a","P=E/t"],r:0,e:"P = F×v."},
+{q:"Puissance d'un couple M :",o:["P=M×ω","P=M/ω","P=M×θ","P=M×ω²"],r:0,e:"P = M×ω."}
+]}
+]},
+"1D_optique":{titre:"Optique",niveau:"1ere",serie:"D",icone:"🔦",lecons:[
+{titre:"Lentilles - définitions",questions:[
+{q:"Lentille convergente : vergence ?",o:["Positive","Négative","Nulle","Variable"],r:0,e:"Vergence positive."},
+{q:"Lentille divergente : vergence ?",o:["Positive","Négative","Nulle","Variable"],r:1,e:"Vergence négative."},
+{q:"Vergence C = ?",o:["C=f'","C=1/f'","C=-1/f'","C=f'²"],r:1,e:"C = 1/f'."},
+{q:"f'=0,25m → C=?",o:["0,25δ","4δ","-4δ","25δ"],r:1,e:"1/0,25 = 4δ."},
+{q:"Conditions de Gauss :",o:["Rayons parallèles","Rayons peu inclinés","Lentille convergente","Lentille divergente"],r:1,e:"Rayons paraxiaux."}
+]},
+{titre:"Construction d'images",questions:[
+{q:"Objet à 2f → image :",o:["Infini","2f' autre côté","Foyer F'","Entre F' et 2f'"],r:1,e:"Image à 2f'."},
+{q:"Objet entre F et O → image :",o:["Réelle renversée","Virtuelle droite","Réelle droite","Virtuelle renversée"],r:1,e:"Virtuelle, droite, agrandie."},
+{q:"Objet au foyer F → image :",o:["Infini","2f'","Foyer F'","Virtuelle"],r:0,e:"Image à l'infini."},
+{q:"Objet à l'infini → image :",o:["Infini","Foyer F'","2f'","Virtuelle"],r:1,e:"Image au foyer F'."},
+{q:"Lentille divergente → image :",o:["Réelle renversée","Virtuelle droite","Réelle droite","Virtuelle renversée"],r:1,e:"Virtuelle, droite, plus petite."}
+]}
+]},
+"1D_electricite":{titre:"Électricité",niveau:"1ere",serie:"D",icone:"⚡",lecons:[
+{titre:"Générateurs et récepteurs",questions:[
+{q:"U=E-rI est la tension d'un :",o:["Générateur","Récepteur","Résistor","Condensateur"],r:0,e:"C'est un générateur."},
+{q:"La f.é.m. E est :",o:["Tension à vide","Tension en charge","Court-circuit","Puissance"],r:0,e:"E est la tension à vide."},
+{q:"U=E'+r'I est la tension d'un :",o:["Générateur","Récepteur","Résistor","Condensateur"],r:1,e:"C'est un récepteur."},
+{q:"Un moteur est un :",o:["Générateur","Récepteur","Résistor","Condensateur"],r:1,e:"Un moteur est un récepteur."},
+{q:"Ordonnée à l'origine d'un générateur :",o:["r","E","I","P"],r:1,e:"L'ordonnée est E."}
+]},
+{titre:"Point de fonctionnement",questions:[
+{q:"Point de fonctionnement :",o:["Intersection","Valeur résistance","Tension à vide","Puissance max"],r:0,e:"Intersection des caractéristiques."},
+{q:"Loi de Pouillet :",o:["I=(E-E')/(r+r')","I=(E+E')/(r+r')","I=(E-E')×(r+r')","I=(E'-E)/(r+r')"],r:0,e:"I = (E-E')/(r+r')"},
+{q:"2 générateurs en série : E_eq = ?",o:["E","2E","E/2","0"],r:1,e:"E_eq = 2E."},
+{q:"2 générateurs en parallèle : E_eq = ?",o:["E","2E","E/2","0"],r:0,e:"E_eq = E."},
+{q:"Résistances en série : R_eq = ?",o:["R₁+R₂","1/R₁+1/R₂","R₁R₂/(R₁+R₂)","R₁R₂"],r:0,e:"R_eq = R₁+R₂."}
+]}
+]}
+]};
+
+let etat={eleve:{nom:"",niveau:"1ere",serie:"D"},moduleActuel:null,leconActuelle:null,questionActuelle:0,reponses:[],score:0,total:0,filtreSerie:"D",leconsCompleted:{}};
+
+function sauvegarder(){try{localStorage.setItem('physique_progression',JSON.stringify({eleve:etat.eleve,leconsCompleted:etat.leconsCompleted}));}catch(e){}}
+function charger(){try{const d=localStorage.getItem('physique_progression');if(d){const p=JSON.parse(d);if(p.eleve){etat.eleve=p.eleve;document.getElementById('nom').value=p.eleve.nom||'';document.getElementById('niveau').value=p.eleve.niveau||'1ere';document.getElementById('serie').value=p.eleve.serie||'D';}if(p.leconsCompleted)etat.leconsCompleted=p.leconsCompleted;return true;}}catch(e){}return false;}
+function reinitialiser(){if(confirm('Réinitialiser ?')){localStorage.removeItem('physique_progression');etat.leconsCompleted={};etat.eleve={nom:"",niveau:"1ere",serie:"D"};alert('✅ Réinitialisé.');showPage('page-accueil');}}
+function stats(){const c=Object.keys(etat.leconsCompleted).filter(k=>etat.leconsCompleted[k]);return{c:c.length,t:Object.keys(etat.leconsCompleted).length};}
+function showPage(id){document.querySelectorAll('[id^="page-"]').forEach(p=>p.classList.add('hidden'));const p=document.getElementById(id);if(p)p.classList.remove('hidden');}
+function enregistrer(){const n=document.getElementById('nom').value.trim();if(!n){alert("Entrez votre nom.");return;}etat.eleve={nom:n,niveau:document.getElementById('niveau').value,serie:document.getElementById('serie').value};document.getElementById('eleve-nom').textContent=n;etat.filtreSerie=etat.eleve.serie;document.querySelectorAll('.btn-filtre').forEach(b=>b.classList.toggle('active',b.dataset.filtre===etat.filtreSerie));afficherModules();sauvegarder();showPage('page-modules');}
+function demarrer(){if(charger()&&etat.eleve.nom){document.getElementById('eleve-nom').textContent=etat.eleve.nom;etat.filtreSerie=etat.eleve.serie||'D';document.querySelectorAll('.btn-filtre').forEach(b=>b.classList.toggle('active',b.dataset.filtre===etat.filtreSerie));afficherModules();showPage('page-modules');}else{showPage('page-profil');}}
+function getModules(){const p=etat.eleve.niveau==="1ere"?"1":"T";return Object.keys(modulesData).filter(k=>k.startsWith(p+etat.filtreSerie)).map(k=>({key:k,...modulesData[k]}));}
+function afficherModules(){const mods=getModules();const c=document.getElementById('module-grid');if(mods.length===0){c.innerHTML='<p style="text-align:center;color:#888;padding:20px;">Aucun module.</p>';return;}let h='<div class="module-grid">';mods.forEach(m=>{h+='<button class="btn btn-module" onclick="ouvrirModule(\''+m.key+'\')"><span class="icon">'+m.icone+'</span><span class="titre-module">'+m.titre+'</span></button>';});h+='</div>';c.innerHTML=h;const st=stats();document.getElementById('progression-resume').innerHTML=st.c>0?'📊 Progression : <strong>'+st.c+'</strong> leçons complétées':'📊 Aucune leçon complétée.';}
+function changerFiltre(s){etat.filtreSerie=s;document.querySelectorAll('.btn-filtre').forEach(b=>b.classList.toggle('active',b.dataset.filtre===s));afficherModules();}
+function ouvrirModule(key){const m=modulesData[key];if(!m)return;etat.moduleActuel=key;document.getElementById('lecon-module-titre').textContent=m.icone+' '+m.titre;let h='';if(m.lecons){m.lecons.forEach((l,i)=>{const num=i+1;const completed=etat.leconsCompleted[key+'_lecon_'+i]||false;h+='<button class="btn-lecon'+(completed?' completed':'')+'" onclick="demarrerLecon(\''+key+'\','+i+')"><span class="lecon-num">'+num+'</span><span class="lecon-titre">'+l.titre+'</span></button>';});}document.getElementById('lecon-grid').innerHTML=h;const total=m.lecons?m.lecons.length:0;const completed=Object.keys(etat.leconsCompleted).filter(k=>k.startsWith(key)&&etat.leconsCompleted[k]).length;const p=total>0?Math.round(completed/total*100):0;const bar=document.getElementById('progress-bar');bar.style.width=p+'%';bar.textContent=p+'%';showPage('page-lecons');}
+function retour(){if(etat.moduleActuel)ouvrirModule(etat.moduleActuel);else showPage('page-modules');}
+function demarrerLecon(key,idx){const m=modulesData[key];if(!m)return;const l=m.lecons[idx];if(!l)return;etat.moduleActuel=key;etat.leconActuelle=idx;etat.questionActuelle=0;etat.total=l.questions.length;etat.reponses=new Array(etat.total).fill(null);etat.score=0;document.getElementById('quiz-titre').textContent='📖 '+l.titre;document.getElementById('quiz-module').textContent=m.icone+' '+m.titre;showPage('page-quiz');afficherQuestion();}
+function afficherQuestion(){if(etat.questionActuelle>=etat.total){terminerLecon();return;}const m=modulesData[etat.moduleActuel];const l=m.lecons[etat.leconActuelle];const q=l.questions[etat.questionActuelle];const idx=etat.questionActuelle;document.getElementById('quiz-progress').textContent=(idx+1)+' / '+etat.total;let h='<div class="question-text">'+q.q+'</div><div class="options-list">';q.o.forEach((opt,i)=>{const lettre=String.fromCharCode(65+i);const checked=etat.reponses[idx]===i?'checked':'';h+='<div class="option-item'+(checked?' selected':'')+'" onclick="selectionnerOption('+idx+','+i+')"><input type="radio" name="q_'+idx+'" value="'+i+'" '+checked+'><label><span>'+lettre+')</span> '+opt+'</label></div>';});h+='</div>';document.getElementById('question-container').innerHTML=h;document.getElementById('correction-container').classList.add('hidden');document.getElementById('correction-container').innerHTML='';const actions=document.getElementById('question-actions');if(etat.reponses[idx]!==null){afficherCorrection(idx);actions.innerHTML='<button class="btn btn-primary" onclick="questionSuivante()">➡️ Suivant</button>';}else{actions.innerHTML='<button class="btn btn-success" onclick="validerReponse()">✅ Valider</button>';}}
+function selectionnerOption(idx,opt){if(etat.reponses[idx]!==null)return;const container=document.getElementById('question-container');const items=container.querySelectorAll('.option-item');items.forEach((item,i)=>{const radio=item.querySelector('input[type="radio"]');if(i===opt){item.classList.add('selected');radio.checked=true;}else{item.classList.remove('selected');radio.checked=false;}});container.dataset.selected=opt;}
+function validerReponse(){const idx=etat.questionActuelle;const container=document.getElementById('question-container');const selected=container.dataset.selected;if(selected===undefined||selected===''){alert("Choisissez une réponse.");return;}const opt=parseInt(selected);const m=modulesData[etat.moduleActuel];const l=m.lecons[etat.leconActuelle];const q=l.questions[idx];const correct=opt===parseInt(q.r);etat.reponses[idx]=opt;if(correct)etat.score++;document.querySelectorAll('.option-item input[type="radio"]').forEach(r=>r.disabled=true);afficherCorrection(idx);document.getElementById('question-actions').innerHTML='<button class="btn btn-primary" onclick="questionSuivante()">➡️ Suivant</button>';}
+function afficherCorrection(idx){const m=modulesData[etat.moduleActuel];const l=m.lecons[etat.leconActuelle];const q=l.questions[idx];const correct=etat.reponses[idx]===parseInt(q.r);const bonne=q.o[parseInt(q.r)];const lettre=String.fromCharCode(65+parseInt(q.r));const container=document.getElementById('correction-container');container.classList.remove('hidden');container.className='correction-box '+(correct?'correct':'incorrect');container.innerHTML='<div class="status">'+(correct?'✅ Bonne réponse !':'❌ Réponse incorrecte')+'</div><div class="explication"><strong>🔍 Explication :</strong><br>'+q.e+(correct?'':'<br><br><strong>✅ Réponse attendue :</strong> '+lettre+') '+bonne)+'</div>';}
+function questionSuivante(){etat.questionActuelle++;if(etat.questionActuelle>=etat.total)terminerLecon();else afficherQuestion();}
+function terminerLecon(){if(etat.leconActuelle>=0){const key=etat.moduleActuel+'_lecon_'+etat.leconActuelle;etat.leconsCompleted[key]=true;sauvegarder();}showPage('page-resultats');document.getElementById('score-display').innerHTML=etat.score+' <small>/'+etat.total+'</small>';document.getElementById('result-nom').textContent=etat.eleve.nom;document.getElementById('result-juste').textContent=etat.score;document.getElementById('result-faux').textContent=etat.total-etat.score;const m=modulesData[etat.moduleActuel];const l=m.lecons[etat.leconActuelle];document.getElementById('result-titre').textContent='📖 '+l.titre;}
+function envoyer(){const eleve=etat.eleve;const m=modulesData[etat.moduleActuel];const l=m.lecons[etat.leconActuelle];let msg='📊 *Résultats - Physique*%0A%0A👨‍🏫 *Prof :* Mr Ndjana a Bidias%0A👤 *Élève :* '+eleve.nom+'%0A📚 *Niveau :* '+eleve.niveau+' '+eleve.serie+'%0A📖 *Module :* '+m.icone+' '+m.titre+'%0A📝 *Leçon :* '+l.titre+'%0A%0A🎯 *Score :* '+etat.score+' / '+etat.total+'%0A✅ Bonnes : '+etat.score+'%0A❌ Mauvaises : '+(etat.total-etat.score);l.questions.forEach((q,i)=>{const rep=etat.reponses[i];const correct=rep===parseInt(q.r);const repText=rep!==null?q.o[rep]:'Non répondue';const bonne=q.o[parseInt(q.r)];msg+='%0A'+(i+1)+'. '+q.q.substring(0,40)+'...%0A   Réponse : '+repText+'%0A   Correcte : '+(correct?'✅':'❌ (Attendue: '+bonne+')');});window.open('https://wa.me/'+NUMERO_WHATSAPP+'?text='+msg,'_blank');}
+charger();showPage('page-accueil');
+</script>
+</body>
+</html>
